@@ -63,7 +63,7 @@ class WidgetCaptureShare{
     final ByteData? byteData =
     await image.toByteData(format: ui.ImageByteFormat.png);
 
-    /// The byteData is converted to uInt8List image aka memory Image.
+    /// The byteData is converted to uInt8List image memory Image.
     final u8Image = byteData!.buffer.asUint8List();
 
     if (saveToDevice) {
