@@ -11,7 +11,7 @@ A flutter package that provides you to capture any widget to image. The features
 1. Add the latest version of package to your pubspec.yaml (and run`dart pub get`):
 ```yaml
 dependencies:
-  widget_capture_share: ^0.0.3
+  widget_capture_share: ^0.0.6
 ```
 2. Import the package and use it in your Flutter App.
 ```dart
