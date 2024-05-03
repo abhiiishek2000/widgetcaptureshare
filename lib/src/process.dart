@@ -9,22 +9,22 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
-class WidgetCaptureShare{
+class WidgetCaptureShare {
   static Future capture(GlobalKey key,
       {String fileName = 'WidgetCaptureShare',
-        bool openFilePreview = true,
-        bool saveToDevice = false,
-        bool isShare =false,
-        String? albumName,
-        String? shareText,
-        double? pixelRatio,
-        bool returnImageUint8List = false}) async {
+      bool openFilePreview = true,
+      bool saveToDevice = false,
+      bool isShare = false,
+      String? albumName,
+      String? shareText,
+      double? pixelRatio,
+      bool returnImageUint8List = false}) async {
     try {
       pixelRatio ??= ui.window.devicePixelRatio;
 
       /// finding the widget in the current context by the key.
       var repaintBoundary =
-      key.currentContext!.findRenderObject() as RenderRepaintBoundary;
+          key.currentContext!.findRenderObject() as RenderRepaintBoundary;
 
       /// With the repaintBoundary we got from the context, we start the createImageProcess
       await _createImageProcess(
@@ -35,7 +35,7 @@ class WidgetCaptureShare{
           openFilePreview: openFilePreview,
           isShare: isShare,
           repaintBoundary: repaintBoundary,
-          shareText :shareText,
+          shareText: shareText,
           pixelRatio: pixelRatio);
     } catch (e) {
       /// if the above process is failed, the error is printed.
@@ -43,25 +43,24 @@ class WidgetCaptureShare{
     }
   }
 
-
   /// create image process
   static Future _createImageProcess(
       {saveToDevice,
-        albumName,
-        fileName,
-        isShare,
-        returnImageUint8List,
-        openFilePreview,
-        repaintBoundary,
-        shareText,
-        pixelRatio}) async {
+      albumName,
+      fileName,
+      isShare,
+      returnImageUint8List,
+      openFilePreview,
+      repaintBoundary,
+      shareText,
+      pixelRatio}) async {
     /// the boundary is converted to Image.
     final ui.Image image =
-    await repaintBoundary.toImage(pixelRatio: pixelRatio);
+        await repaintBoundary.toImage(pixelRatio: pixelRatio);
 
     /// The raw image is converted to byte data.
     final ByteData? byteData =
-    await image.toByteData(format: ui.ImageByteFormat.png);
+        await image.toByteData(format: ui.ImageByteFormat.png);
 
     /// The byteData is converted to uInt8List image memory Image.
     final u8Image = byteData!.buffer.asUint8List();
@@ -69,7 +68,6 @@ class WidgetCaptureShare{
     if (saveToDevice) {
       _saveImageToDevice(albumName, fileName);
     }
-
 
     /// If the returnImageUint8List is true, return the image as uInt8List
     if (returnImageUint8List) {
@@ -81,9 +79,8 @@ class WidgetCaptureShare{
       await _openImagePreview(u8Image, fileName);
     }
     if (isShare) {
-      await _share(u8Image, fileName,shareText ?? '');
+      await _share(u8Image, fileName, shareText ?? '');
     }
-
   }
 
   static Future _openImagePreview(Uint8List u8Image, String imageName) async {
@@ -103,8 +100,9 @@ class WidgetCaptureShare{
 
     return file;
   }
-  static Future _share(Uint8List u8Image, String imageName,String shareText) async {
 
+  static Future _share(
+      Uint8List u8Image, String imageName, String shareText) async {
     /// getting the temp directory of the app.
     String dir = (await getApplicationDocumentsDirectory()).path;
 
@@ -115,8 +113,7 @@ class WidgetCaptureShare{
     await file.writeAsBytes(u8Image);
 
     /// share image
-    await Share.shareFiles([file.path],text:shareText);
-
+    await Share.shareXFiles([XFile(file.path)], text: shareText);
   }
 
   /// To save the images locally
@@ -131,5 +128,4 @@ class WidgetCaptureShare{
     /// if the album is null, it saves to the all pictures.
     await GallerySaver.saveImage(file.path, albumName: album);
   }
-
 }
